@@ -1,0 +1,100 @@
+body {
+  background-color: #121212;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 3rem;
+}
+
+.subtitle {
+  font-size: 1.7rem;
+  margin-bottom: 3rem;
+}
+
+.buttons {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.btn {
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.outline {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+.btn.outline:hover {
+  background-color: white;
+  color: black;
+}
+
+.btn.light {
+  background-color: #f1f1f1;
+  color: black;
+  border: none;
+}
+
+.btn.light:hover {
+  background-color: #e2e2e2;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #aaa;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #333;
+  margin: 0 15px;
+}
+
+.btn.google {
+  background-color: #f1f1f1;
+  color: black;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn.google img {
+  width: 22px;
+  height: 22px;
+}

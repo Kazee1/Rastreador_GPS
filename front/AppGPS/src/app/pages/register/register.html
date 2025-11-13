@@ -1,0 +1,40 @@
+<div class="register-container">
+  <div class="header">
+    <h1>Faça seu registro!</h1>
+    <p>Cadastre-se para começar a usar o ProtecTI</p>
+  </div>
+
+  <div class="card">
+    <h2>Bem-vindo!</h2>
+    <p>Crie sua conta para continuar</p>
+
+    <form [formGroup]="form" (ngSubmit)="registrar()">
+      <div class="input-group">
+        <span class="icon"><i class="fa-solid fa-user"></i></span>
+        <input type="text" placeholder="Nome" required />
+      </div>
+
+      <div class="input-group">
+        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+        <input type="email" placeholder="Email" required />
+      </div>
+
+      <div class="input-group">
+        <span class="icon"><i class="fa-solid fa-lock"></i></span>
+        <input type="password" placeholder="Senha" required />
+      </div>
+
+      <div class="input-group">
+        <span class="icon"><i class="fa-solid fa-lock"></i></span>
+        <input type="password" placeholder="Confirmar senha" required />
+      </div>
+
+      <button type="submit" class="btn-register">Registrar</button>
+    </form>
+
+    <p class="link">
+      Já possui uma conta?
+      <a routerLink="/login">Entrar</a>
+    </p>
+  </div>
+</div>

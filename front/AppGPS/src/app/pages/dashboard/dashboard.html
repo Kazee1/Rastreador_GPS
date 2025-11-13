@@ -1,0 +1,40 @@
+<div class="dashboard-container">
+  <!-- Cabeçalho -->
+  <header>
+    <h1>ProtecTI</h1>
+    <i class="fa-solid fa-bell"></i>
+  </header>
+
+  <p class="subtitle">Visualize a situação do seu dispositivo</p>
+
+  <!-- Área de conteúdo -->
+  <div class="content" routerLink="/gps">
+    <div class="card-option">
+      <div class="icon">
+        <i class="fa-solid fa-location-dot"></i>
+      </div>
+      <div class="info">
+        <h3>Gps</h3>
+        <p>Visualize a situação em tempo real</p>
+      </div>
+    </div>
+
+    <div class="card-option" routerLink="/dispositivo">
+      <div class="icon">
+        <i class="fa-solid fa-desktop"></i>
+      </div>
+      <div class="info">
+        <h3>Cadastro</h3>
+        <p>Cadastre um novo dispositivo</p>
+      </div>
+    </div>
+
+    <div class="card-status" routerLink="/organizacao">
+      <div class="icon-status">
+        <i class="fa-solid fa-house"></i>
+      </div>
+      <p>Você ainda não está conectado a uma organização.</p>
+      <button class="btn-black">Entrar em uma organização</button>
+    </div>
+  </div>
+</div>

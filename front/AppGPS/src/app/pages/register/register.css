@@ -1,0 +1,110 @@
+.register-container {
+  background-color: #141414;
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+}
+
+.header {
+  text-align: left;
+  width: 360px;
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.header p {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.card {
+  background-color: #f6f7f8;
+  color: #000;
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem;
+  width: 360px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.card p {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.input-group .icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.input-group input {
+  width: 90%;
+  padding: 0.8rem 0.8rem 0.8rem 2.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #e6e7e8;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.input-group input::placeholder {
+  color: #666;
+}
+
+.btn-register {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #141414;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn-register:hover {
+  background-color: #000;
+}
+
+.link {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.link a {
+  font-weight: 600;
+  color: #000;
+  text-decoration: none;
+}
+
+.link a:hover {
+  text-decoration: underline;
+}

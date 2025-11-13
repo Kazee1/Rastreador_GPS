@@ -1,0 +1,22 @@
+<div class="organization-container">
+  <h1>ProtecTI</h1>
+  <p>Faz parte de alguma organização?<br />Insira o código</p>
+
+  <form [formGroup]="form" (ngSubmit)="entrar()">
+  <input
+    type="text"
+    formControlName="codigo"
+    placeholder="Código"
+    required
+  />
+  <button type="submit" class="btn">Entrar</button>
+</form>
+
+  <div class="card">
+    <h2>Não tem organização?</h2>
+    <button routerLink="/registerOrganizacao" class="btn-black">
+      Registrar
+    </button>
+    <button class="btn-black" routerLink="/dashboard">Entrar sem organização</button>
+  </div>
+</div>

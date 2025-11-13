@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="top-section">
+    <h1>ProtecTI</h1>
+    <p>Cadastre o dispositivo</p>
+  </div>
+
+  <div class="form-container">
+    <h2>Bem-vindo!</h2>
+    <p>Cadastro do dispositivo</p>
+
+    <input
+      type="text"
+      placeholder="Nome do dispositivo"
+      [(ngModel)]="dispositivo.nome"
+    />
+    <input
+      type="text"
+      placeholder="Local"
+      [(ngModel)]="dispositivo.local"
+    />
+    <input
+      type="text"
+      placeholder="Responsável"
+      [(ngModel)]="dispositivo.responsavel"
+    />
+
+    <button class="btn conectar" (click)="conectarDispositivo()">
+      Conectar dispositivo
+    </button>
+    <button class="btn registrar" (click)="registrar()">
+      Registrar
+    </button>
+
+  </div>
+</div>

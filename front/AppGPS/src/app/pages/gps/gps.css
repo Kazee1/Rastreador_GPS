@@ -1,0 +1,125 @@
+.container {
+  background-color: #111;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+header {
+  text-align: left;
+  padding: 15px;
+  position: relative;
+  z-index: 3;
+}
+
+header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+header p {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 3px;
+}
+
+.config {
+  position: absolute;
+  right: 15px;
+  top: 18px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.mapa-container {
+  flex: 1;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.mapa {
+  width: 100%;
+  height: 80%;
+  border: none;
+}
+
+/* === seta flutuante === */
+.seta {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f1f1f;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 20px;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  z-index: 10;
+}
+
+.seta:hover {
+  background: #333;
+}
+
+.seta.aberto {
+  bottom: calc(40% + 10px); /* sobe junto com a tabela */
+  transform: translateX(-50%) rotate(180deg);
+}
+
+/* === painel da tabela === */
+.tabela-container {
+  position: fixed;
+  left: 0;
+  bottom: -100%;
+  width: 100%;
+  background: #1b1b1b;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.4);
+  transition: bottom 0.4s ease-in-out;
+  padding: 15px;
+  z-index: 5;
+  height: 40%; /* ocupa parte da tela */
+}
+
+.tabela-container.visivel {
+  bottom: 0;
+}
+
+.tabela-container h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #ddd;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+.ativo {
+  color: #00ff7f;
+}
+
+.inativo {
+  color: #ff5555;
+}

@@ -1,0 +1,56 @@
+<div class="container">
+  <header>
+    <div class="header-top">
+      <i class="fa-solid fa-arrow-left seta-voltar" routerLink="/dashboard"></i>
+      <h1>ProtecTI</h1>
+    </div>
+    <p>Visualize a situação do seu dispositivo</p>
+    <i class="fa-solid fa-gear config"></i>
+  </header>
+
+  <div class="mapa-container">
+    <iframe
+      src="https://www.google.com/maps?q=Calapan,Philippines&output=embed"
+      allowfullscreen=""
+      loading="lazy"
+      class="mapa"
+    ></iframe>
+  </div>
+
+  <!-- seta sempre visível -->
+  <button
+    class="seta"
+    [ngClass]="{ aberto: mostrarTabela }"
+    (click)="toggleTabela()"
+  >
+    <i
+      [ngClass]="mostrarTabela ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'"
+    ></i>
+  </button>
+
+  <!-- painel da tabela -->
+  <div class="tabela-container" [class.visivel]="mostrarTabela">
+    <h3>Dispositivos Conectados</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Status</th>
+          <th>Localização</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of dispositivos">
+          <td>{{ d.nome }}</td>
+          <td
+            [class.ativo]="d.status === 'Ativo'"
+            [class.inativo]="d.status === 'Inativo'"
+          >
+            {{ d.status }}
+          </td>
+          <td>{{ d.localizacao }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
