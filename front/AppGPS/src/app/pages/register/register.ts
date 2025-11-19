@@ -29,13 +29,9 @@ export class Register {
     if (this.form.valid) {
       this.auth.registrar(this.form.value).subscribe({
         next: (res: any) => {
-          console.log('Resposta do backend:', res);
-
-          if (res.status === 'ok') {
+          console.log('Resposta do backend:', res);        
             alert('Registro bem-sucedido!');
             this.router.navigate(['/dashboard']);
-            
-          } 
         },
         
         error: (err: any) => console.error('Erro:', err)
