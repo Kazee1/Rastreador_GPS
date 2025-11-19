@@ -19,6 +19,7 @@ body {
 }
 
 .header {
+  margin-top: -180px;
   color: white;
   text-align: left;
   width: 90%;
@@ -37,15 +38,12 @@ body {
 }
 
 .card {
-  background-color: #f3f4f6;
-  width: 90%;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+  background-color: #f6f7f8;
+  color: #000;
+  border-radius: 1.5rem;
   padding: 2rem 1.5rem;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  width: 85%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .card h3 {
