@@ -28,19 +28,36 @@ export async function verifica_user(usuario) {
 
   // Comparar senha
   if (encontrado.senha === usuario.senha) {
-    return true;
+    return encontrado;
   }
 
   return false;
 }
 
-export async function pegarCliente(id) {
+export async function criarorganizacao(noveorganizcao) {
     const db = conexao.db("banco");
-    const collection = db.collection("clientes");
-    const objectId = ObjectId.createFromHexString(id);
-    return collection.findOne({_id: new ObjectId(objectId)})
-    
+    const collection = db.collection("organizacao");
+    return collection.insertOne(noveorganizcao);
 }
+
+export async function verifica_organizacao(codigo) {
+    const db = conexao.db("banco");
+    const collection = db.collection("organizacao");
+    const encontrado = await collection.findOne({ codigo: codigo });
+    return encontrado;
+}
+export async function entrarorg(userId, org) {
+    
+  const db = conexao.db("banco");
+  const users = db.collection("usuarios");
+  const resultado = await users.updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: { organizacaoId: org._id } }
+  );
+  console.log(resultado);
+  return resultado;
+}
+
 export async function modificarCliente(id, cliente) {
     const db = conexao.db("banco");
     const collection = db.collection("clientes");

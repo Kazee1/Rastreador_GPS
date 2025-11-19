@@ -29,6 +29,7 @@ export class Register {
     if (this.form.valid) {
       this.auth.registrar(this.form.value).subscribe({
         next: (res: any) => {
+          localStorage.setItem('token', res.token);
           console.log('Resposta do backend:', res);        
             alert('Registro bem-sucedido!');
             this.router.navigate(['/dashboard']);

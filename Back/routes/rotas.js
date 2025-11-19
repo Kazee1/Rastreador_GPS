@@ -3,8 +3,8 @@ import cors from "cors";
 import {
   registro,
   login,
-  
-  MostrarClientes,
+  entrar_organizacao,
+  authMiddleware,
   PegarDadosCliente,
   EditarCliente,
   DeletarCliente,
@@ -23,14 +23,15 @@ import {
   atualizarFinanceiro,
   buscarFinanceiro,
   criarFinanceiro,
+  registro_organizacao,
 } from "../controllers/controller.js";
 
 const routes = (app) => {
   app.use(express.json());
   app.post("/api/registro", registro);
   app.post("/api/login", login);
-  app.get("/api/clientes", MostrarClientes);
-  app.get("/api/clientes/:id", PegarDadosCliente);
+  app.post("/api/organizacao", registro_organizacao);
+  app.post("/api/organizacao/verificar", entrar_organizacao);
   app.put("/api/clientes/:id", EditarCliente);
   app.delete("/api/clientes/:id", DeletarCliente);
   app.post("/api/agendas", novaAgenda);

@@ -3,8 +3,10 @@ import { CriarToken, VerificarToken } from "../auth-sec/auth/token.js";
 import {
   criarUsuario,
   verifica_user,
-  pegarClientes,
-  pegarCliente,
+  criarorganizacao,
+  verifica_organizacao,
+  entrarorg,
+  
   modificarCliente,
   deletarCliente,
   criarAgenda,
@@ -24,6 +26,7 @@ import {
   modificarMongoFinanceiro,
   deletarMongoFinanceiro,
   verificarVencidos,
+  
   
 } from "../models/bancomongo.js";
 import fs from "fs";
@@ -45,20 +48,32 @@ import { fileURLToPath } from "url";
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const key = crypto.createHash("sha256").update(process.env.KEY).digest();
+import jwt from "jsonwebtoken";
 
+const SECRET = "sua_chave_secreta_123"; // ideal colocar em variável de ambiente
 export async function registro(req, res) {
   try {
     const novoUsuario =  req.body;
     const usuarioCriado = await criarUsuario(novoUsuario);
     
-
+      const token = jwt.sign(
+      { id: usuarioCriado._id },
+      SECRET,
+      { expiresIn: "7d" } // expira em 7 dias
+      );
+      
+      return res.json({
+      status: "ok",
+      token,
+      user: usuarioCriado, // opcional
+      });
     // exemplo de resposta
     res.status(200).json(usuarioCriado);
   } catch (err) {
-    console.error("Erro ao salvar cliente:", err);
+    console.error("Erro ao salvar usuario:", err);
     res
       .status(500)
-      .json({ message: "Erro ao salvar o cliente", error: err.message });
+      .json({ message: "Erro ao salvar o usuario", error: err.message });
   }
 }
 
@@ -66,10 +81,19 @@ export async function login(req, res) {
   try {
     const user = req.body;
     console.log(user);
-    const ok = await verifica_user(user);
-    if(verifica_user(ok)){
-      console.log("entrou");
-      return res.json({status: "ok"});
+    const usuarioEncontrado = await verifica_user(user);
+    if (usuarioEncontrado){
+      const token = jwt.sign(
+      { id: usuarioEncontrado._id },
+      SECRET,
+      { expiresIn: "7d" } // expira em 7 dias
+      );
+      
+      return res.json({
+      status: "ok",
+      token,
+      user: usuarioEncontrado, // opcional
+      });
     }
     else{
       console.log("não entrou");
@@ -82,16 +106,88 @@ export async function login(req, res) {
   }
 }
 
-
-
-export async function MostrarClientes(req, res) {
+export async function registro_organizacao(req, res) {
   try {
-    const clientes = await pegarClientes();
-    res.status(200).json(clientes);
+    const novoorganizacao =  req.body;
+    const organizacaoCriado = await criarorganizacao(novoorganizacao);
+    
+
+    // exemplo de resposta
+    res.status(200).json(organizacaoCriado);
   } catch (err) {
+    console.error("Erro ao salvar cliente:", err);
     res
       .status(500)
-      .json({ message: "Erro ao carregar os clientes", error: err.message });
+      .json({ message: "Erro ao salvar o cliente", error: err.message });
+  }
+}
+
+export async function entrar_organizacao(req, res) {
+  try {
+    const { codigo } = req.body;
+
+    // tentar pegar o token, mas NÃO obrigar
+    let userId = null;
+
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, SECRET);
+        userId = decoded.id;
+      } catch (err) {
+        console.log("Token inválido (mas não bloquear)", err.message);
+      }
+    }
+
+    console.log("userId extraído do token:", userId);
+    console.log(codigo);
+    // Verifica se a organização existe
+    const org = await verifica_organizacao(codigo);
+
+    if (!org) {
+      return res.json({ status: "no", message: "Código inválido" });
+    }
+
+    // Se tiver userId, atualiza o usuário na organização
+    if (userId) {
+      console.log("entrando user");
+      const a = await entrarorg(userId, org);
+      if(a){
+        console.log("organização na pessoa");
+      }
+      else{
+        console.log("erro");
+      }
+    }
+
+    return res.json({
+      status: "ok",
+      message: "Organização encontrada",
+      organizacao: org.nome,
+      userId: userId ?? null
+    });
+
+  } catch (err) {
+    console.error("Erro ao entrar na organização:", err);
+    return res.status(500).json({ message: "Erro interno" });
+  }
+}
+
+export function authMiddleware(req, res, next) {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "Token não enviado" });
+    }
+
+    const decoded = jwt.verify(token, "sua_chave_secreta_123"); // MESMO segredo do login
+    req.userId = decoded.id; // salva o id dentro da req
+    next();
+
+  } catch (err) {
+    return res.status(401).json({ message: "Token inválido" });
   }
 }
 

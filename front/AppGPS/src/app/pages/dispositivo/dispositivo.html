@@ -8,31 +8,38 @@
     <h2>Bem-vindo!</h2>
     <p>Cadastro do dispositivo</p>
 
-    <input
-      type="text"
-      placeholder="Nome do dispositivo"
-      [(ngModel)]="dispositivo.nome"
-    />
-    <input
-      type="text"
-      placeholder="Local"
-      [(ngModel)]="dispositivo.local"
-    />
-    <input
-      type="text"
-      placeholder="Responsável"
-      [(ngModel)]="dispositivo.responsavel"
-    />
+    <form [formGroup]="form">
+      <input
+        type="text"
+        placeholder="Nome do dispositivo"
+        formControlName="nome"
+      />
 
-    <button class="btn conectar" (click)="conectarDispositivo()">
-      Conectar dispositivo
-    </button>
-    <button class="btn registrar" (click)="registrar()">
-      Registrar
-    </button>
+      <input
+        type="text"
+        placeholder="Local"
+        formControlName="local"
+      />
+
+      <input
+        type="text"
+        placeholder="Responsável"
+        formControlName="responsavel"
+      />
+
+      <button class="btn conectar" (click)="conectarDispositivo()">
+        Conectar dispositivo
+      </button>
+
+      <button class="btn registrar" (click)="registrar()">
+        Registrar
+      </button>
+    </form>
 
     <div class="bottom-links">
-      <span class="back" routerLink="/dashboard"><i class="fa-solid fa-arrow-left"></i></span>
-</div>
+      <span class="back" routerLink="/dashboard">
+        <i class="fa-solid fa-arrow-left"></i>
+      </span>
+    </div>
   </div>
 </div>

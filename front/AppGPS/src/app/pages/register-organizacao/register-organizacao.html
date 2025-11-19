@@ -6,11 +6,15 @@
     <h2>Bem-vindo!</h2>
     <p>Cadastro da organização</p>
 
-    <form>
-      <input type="text" placeholder="Nome da organização" required />
-      <input type="text" placeholder="Local" required />
-      <input type="text" placeholder="Responsável" required />
-      <input type="text" placeholder="Código" required />
+    <form [formGroup]="form" (ngSubmit)="registrarOrg()">
+
+      <input type="text" formControlName="nome" placeholder="Nome da organização" required />
+
+      <input type="text" formControlName="local" placeholder="Local" required />
+
+      <input type="text" formControlName="responsavel" placeholder="Responsável" required />
+
+      <input type="text" formControlName="codigo" placeholder="Código" required />
 
       <button type="submit" class="btn-black">Registrar</button>
     </form>

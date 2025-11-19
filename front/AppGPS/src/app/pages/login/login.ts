@@ -30,8 +30,9 @@ export class Login {
       this.auth.login(this.form.value).subscribe({
         next: (res: any) => {
           console.log('Resposta do backend:', res);
-
+          
           if (res.status === 'ok') {
+            localStorage.setItem('token', res.token);
             alert('Login bem-sucedido!');
             this.router.navigate(['/dashboard']);
             
