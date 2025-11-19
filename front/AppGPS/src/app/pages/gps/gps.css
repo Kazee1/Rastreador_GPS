@@ -27,6 +27,41 @@ header p {
   margin-top: 3px;
 }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+/* seta de voltar mais bonita */
+.seta-voltar {
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.seta-voltar:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* deixa o título centralizado REAL */
+.header-top h1 {
+  flex: 1;
+  text-align: center;
+  margin-right: 28px; /* compensa o espaço da seta e centraliza */
+}
+
+header p {
+  text-align: center;
+  width: 100%;
+  margin-top: 4px;
+}
+
+
 .config {
   position: absolute;
   right: 15px;
@@ -49,32 +84,57 @@ header p {
   border: none;
 }
 
-/* === seta flutuante === */
+/* === seta flutuante bonita === */
 .seta {
   position: fixed;
   bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  background: #1f1f1f;
+  width: 58px;
+  height: 58px;
   border: none;
   border-radius: 50%;
+  
+  /* efeito glass */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+
+  /* borda suave */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  /* ícone */
   color: #fff;
-  font-size: 20px;
-  width: 45px;
-  height: 45px;
+  font-size: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.35s ease;
   z-index: 10;
+
+  /* sombra alta e suave */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 }
 
+/* efeito hover */
 .seta:hover {
-  background: #333;
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateX(-50%) scale(1.08);
 }
 
+/* seta aberta (tabela visível) */
 .seta.aberto {
-  bottom: calc(40% + 10px); /* sobe junto com a tabela */
+  bottom: calc(40% + 20px);
   transform: translateX(-50%) rotate(180deg);
 }
+
+/* animação leve no ícone */
+.seta i {
+  transition: transform 0.35s ease;
+}
+
 
 /* === painel da tabela === */
 .tabela-container {

@@ -1,3 +1,56 @@
+header {
+  text-align: left;
+  padding: 15px;
+  position: relative;
+  z-index: 3;
+}
+
+header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+header p {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 3px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+/* seta de voltar mais bonita */
+.seta-voltar {
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.seta-voltar:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* deixa o título centralizado REAL */
+.header-top h1 {
+  flex: 1;
+  text-align: center;
+  margin-right: 28px; /* compensa o espaço da seta e centraliza */
+}
+
+header p {
+  text-align: center;
+  width: 100%;
+  margin-top: 4px;
+}
+
+
 .organization-container {
   background-color: #141414;
   color: #fff;
@@ -53,7 +106,7 @@ input {
   background-color: #f6f7f8;
   color: #000;
   border-radius: 1.5rem;
-  width: 320px;
+  width: 280px;
   padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;

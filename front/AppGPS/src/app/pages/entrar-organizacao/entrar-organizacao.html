@@ -1,7 +1,12 @@
 <div class="organization-container">
-  <h1>ProtecTI</h1>
-  <p>Faz parte de alguma organização?<br />Insira o código</p>
-
+   <header>
+    <div class="header-top">
+      <i class="fa-solid fa-arrow-left seta-voltar" routerLink="/dashboard"></i>
+      <h1>ProtecTI</h1>
+    </div>
+    <p>Faz parte de alguma organização?<br />Insira o código</p>
+  </header>
+  
   <form [formGroup]="form" (ngSubmit)="entrar()">
   <input
     type="text"
