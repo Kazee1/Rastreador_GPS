@@ -21,7 +21,7 @@ body {
 .header {
   color: white;
   text-align: left;
-  width: 100%;
+  width: 90%;
   padding: 2rem 2rem 1.5rem;
 }
 
@@ -38,7 +38,7 @@ body {
 
 .card {
   background-color: #f3f4f6;
-  width: 100%;
+  width: 90%;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   padding: 2rem 1.5rem;
