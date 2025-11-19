@@ -1,0 +1,269 @@
+só pra ter o que vou mudar
+import express from "express";
+import multer from "multer";
+import routes from "./routes/rotas.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import mime from 'mime'
+import crypto from "crypto";
+
+const app = express();
+const PORT = 3000;
+
+app.use(cors());
+app.use(bodyParser.json());
+routes(app);
+
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import { VerificarToken } from "./auth-sec/auth/token.js";
+import { decifrarArquivo, decifrarTexto, encriptarArquivo } from "./auth-sec/sec/doccry.js";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadFolder = path.join(__dirname, "uploads");
+const bancoJsonPath = path.join(uploadFolder, "banco.json");
+
+// Configuração do Multer
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+const key =  crypto.createHash('sha256').update(process.env.KEY).digest();
+
+
+
+
+
+// Função para encriptar buffer usando AES-256-CBC
+
+// Middleware
+app.use(express.json());
+
+
+//rota para carregar os arquivos
+app.get("/uploads/:filename",async(req,res)=>{
+     //Pega o nome do arquivo
+     const arquivo = req.params.filename;
+   
+  //tipos permitidos para abertura no  navegador,os que não são permitidos serão baixado
+  const tiposPermitidos = [
+    'application/pdf',
+    'text/plain', 'text/html', 'text/css', 'text/javascript',
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'
+  ];
+
+  try {
+    const nomeDec = decifrarTexto(arquivo,key);
+
+    const documento = await decifrarArquivo(arquivo,uploadFolder,key); 
+    const tipo = mime.getType(nomeDec);
+    if(tiposPermitidos.includes(tipo)){
+      res.setHeader('Content-Disposition', `inline; filename="${nomeDec}"`);
+      res.setHeader('Content-Type', tipo); 
+    
+    }else{
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader('Content-Disposition', `attachment; filename="${nomeDec}"`)
+    }
+    res.send(documento);
+
+  } catch (error) {
+    
+    res.status(404).json({ erro: 'Arquivo não encontrado ou erro na desencriptação' });
+  }
+
+});
+
+
+app.post("/api/documentos", upload.single("arquivo"), async (req, res) => {
+  try{
+    const tipoDocumento = req.body.tipoDocumento;
+    const dados = JSON.parse(req.body.dados);
+    const arquivo = req.file;
+    let arqEnc;
+    
+    try {
+      arqEnc = await encriptarArquivo(arquivo,key,uploadFolder);
+
+      
+    }catch(err){
+      
+      return res.status(400).json({erro:"erro ao encriptar"});
+     
+    }
+    
+
+    const novoRegistro = {
+      id: Date.now().toString(),
+      tipoDocumento,
+      dados,
+      nome: arquivo.originalname,
+      nomeArquivo:arqEnc,
+      url: `/uploads/${arqEnc}`,
+      dataEnvio: new Date().toISOString(),
+    };
+
+    // Lê o banco atual ou inicia novo array
+    let banco = [];
+    try {
+      const conteudo = await fs.readFile(bancoJsonPath, "utf8");
+      banco = JSON.parse(conteudo);
+
+      // ✅ Adiciona IDs a registros antigos que não têm
+      banco = banco.map((doc) => {
+        if (!doc.id) {
+          doc.id = Date.now().toString(); // ou Date.now().toString() se quiser numérico
+        }
+        return doc;
+      });
+    } catch (err) {
+      if (err.code !== "ENOENT") throw err;
+    }
+
+    banco.push(novoRegistro);
+    await fs.writeFile(bancoJsonPath, JSON.stringify(banco, null, 2));
+
+    res
+      .status(200)
+      .json({ mensagem: "Documento salvo com sucesso", id: novoRegistro.id });
+  } catch (error) {
+    console.error("Erro ao salvar no banco.json:", error);
+    res.status(500).json({ erro: "Erro ao salvar documento" });
+  }
+});
+
+app.get("/api/documentos/cliente/:clienteId", async (req, res) => {
+  const clienteId = req.params.clienteId;
+
+  try {
+    const conteudo = await fs.readFile(bancoJsonPath, "utf8");
+    const documentos = JSON.parse(conteudo);
+
+    const filtrados = documentos.filter((d) => d.dados.clienteId === clienteId);
+    res.json(filtrados);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao ler banco de dados" });
+  }
+});
+
+app.get("/api/documentos/com-reuniao", async (req, res) => {
+  try {
+    const conteudo = await fs.readFile(bancoJsonPath, "utf8");
+    const documentos = JSON.parse(conteudo);
+
+    const comReuniao = documentos.filter((d) => d.dados && d.dados.reuniaoId);
+    res.json(comReuniao);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao ler banco de dados" });
+  }
+});
+
+app.put("/api/documentos/:id", upload.single("arquivo"), async (req, res) => {
+  try {
+    const id = req.params.id;
+    const tipoDocumento = req.body.tipoDocumento;
+    const dados = JSON.parse(req.body.dados);
+    const novoarquivo = req.file;
+    let arqEnc;
+    
+    try {
+
+      arqEnc= await encriptarArquivo(novoarquivo,key,uploadFolder);
+
+     }catch(err){
+     return res.status(400).json({erro:"erro ao encriptar"});
+     }
+   
+     let banco = [];
+    try {
+      const conteudo = await fs.readFile(bancoJsonPath, "utf8");
+      banco = JSON.parse(conteudo);
+    } catch (err) {
+      return res.status(500).json({ erro: "Erro ao ler banco de dados" });
+    }
+
+    const index = banco.findIndex((doc) => doc.id === id);
+    if (index === -1) {
+      return res.status(404).json({ erro: "Documento não encontrado" });
+    }
+
+    const docAntigo = banco[index];
+
+    // Atualiza os campos
+    banco[index].tipoDocumento = tipoDocumento;
+    banco[index].dados = dados;
+
+    if (novoarquivo) {
+      // Exclui o arquivo anterior, se existir
+      if (docAntigo.nomeArquivo) {
+        const caminhoAntigo = path.join(uploadFolder, docAntigo.nomeArquivo);
+        try {
+          await fs.unlink(caminhoAntigo);
+        } catch (err) {
+          console.warn("Erro ao excluir arquivo antigo:", err.message);
+        }
+      }
+
+      banco[index].nome = novoarquivo.originalname;
+      banco[index].nomeArquivo = arqEnc;
+      banco[index].url = `/uploads/${arqEnc}`;
+      banco[index].dataEnvio = new Date().toISOString();
+    }
+   
+    await fs.writeFile(bancoJsonPath, JSON.stringify(banco, null, 2));
+
+    res.status(200).json({ mensagem: "Documento atualizado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao atualizar documento:", error);
+    res.status(500).json({ erro: "Erro ao atualizar documento" });
+  }
+});
+
+app.delete("/api/documentos/:id", async (req, res) => {
+  const id = req.params.id;
+  
+
+  try {
+    let banco = [];
+
+    // Lê o banco de dados
+    try {
+      const conteudo = await fs.readFile(bancoJsonPath, "utf8");
+      banco = JSON.parse(conteudo);
+    } catch (err) {
+      return res.status(500).json({ erro: "Erro ao ler banco de dados" });
+    }
+
+    const index = banco.findIndex((doc) => doc.id === id);
+    if (index === -1) {
+      return res.status(404).json({ erro: "Documento não encontrado" });
+    }
+
+    const documento = banco[index];
+
+    // Remove o arquivo físico se existir
+    if (documento.nomeArquivo) {
+      const caminhoArquivo = path.join(uploadFolder, documento.nomeArquivo);
+      try {
+        await fs.unlink(caminhoArquivo);
+      } catch (err) {
+        console.warn("Erro ao excluir arquivo:", err.message);
+      }
+    }
+
+    // Remove o documento do banco
+    banco.splice(index, 1);
+
+    // Salva o banco atualizado
+    await fs.writeFile(bancoJsonPath, JSON.stringify(banco, null, 2));
+
+    res.status(200).json({ mensagem: "Documento excluído com sucesso" });
+  } catch (error) {
+    console.error("Erro ao excluir documento:", error);
+    res.status(500).json({ erro: "Erro ao excluir documento" });
+  }
+});
+
+// Inicia o servidor na porta 3000
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
