@@ -18,7 +18,12 @@ export class DispositivoService {
   constructor(private http: HttpClient) {}
 
   registrarDispositivo(data: DispositivoData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/dispositivo/registrar`, data);
+    const token = localStorage.getItem("token");
+    return this.http.post(`${this.apiUrl}/dispositivo/registrar`, data,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 
   conectarDispositivo(): Observable<any> {

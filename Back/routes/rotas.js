@@ -5,6 +5,7 @@ import {
   login,
   entrar_organizacao,
   authMiddleware,
+  regristro_dispo,
   PegarDadosCliente,
   EditarCliente,
   DeletarCliente,
@@ -32,6 +33,8 @@ const routes = (app) => {
   app.post("/api/login", login);
   app.post("/api/organizacao", registro_organizacao);
   app.post("/api/organizacao/verificar", entrar_organizacao);
+  
+  app.post("/api/dispositivo/registrar", regristro_dispo);
   app.put("/api/clientes/:id", EditarCliente);
   app.delete("/api/clientes/:id", DeletarCliente);
   app.post("/api/agendas", novaAgenda);

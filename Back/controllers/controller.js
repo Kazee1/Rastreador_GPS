@@ -5,8 +5,10 @@ import {
   verifica_user,
   criarorganizacao,
   verifica_organizacao,
+  criarDispositivo,
   entrarorg,
-  
+ dispoorg,
+  verifica_qualuser,
   modificarCliente,
   deletarCliente,
   criarAgenda,
@@ -173,6 +175,52 @@ export async function entrar_organizacao(req, res) {
     return res.status(500).json({ message: "Erro interno" });
   }
 }
+
+export async function regristro_dispo(req, res) {
+  try {
+    const dados = req.body; // nome, local, responsavel
+    const dispoCriado = await criarDispositivo(dados);
+
+    let userId = null;
+
+    // token opcional
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, SECRET);
+        userId = decoded.id;
+      } catch (err) {
+        console.log("Token inválido:", err.message);
+      }
+    }
+
+    const user = await verifica_qualuser(userId);
+
+    if (!user) {
+      return res.json({ status: "no", message: "Usuário não encontrado" });
+    }
+
+    // adiciona dispositivo à organização do usuário
+    await dispoorg(
+      user.organizacaoId,
+      dispoCriado.insertedId
+    );
+
+    return res.json({
+      status: "ok",
+      message: "Dispositivo criado e vinculado à organização",
+      dispositivoId: dispoCriado.insertedId,
+      organizacaoId: user.organizacaoId
+    });
+
+  } catch (err) {
+    console.error("Erro ao registrar dispositivo:", err);
+    return res.status(500).json({ message: "Erro interno" });
+  }
+}
+
+
 
 export function authMiddleware(req, res, next) {
   try {

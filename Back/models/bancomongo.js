@@ -58,6 +58,33 @@ export async function entrarorg(userId, org) {
   return resultado;
 }
 
+export async function criarDispositivo(novoDispositivo) {
+  const db = conexao.db("banco");
+  const collection = db.collection("dispostivos");
+  return collection.insertOne(novoDispositivo);
+}
+
+
+export async function verifica_qualuser(userid) {
+  const db = conexao.db("banco");
+  const collection = db.collection("usuarios");
+  return collection.findOne({ _id: new ObjectId(userid) });
+}
+
+export async function dispoorg(orgId, dispositivoId) {
+  const db = conexao.db("banco");
+  const collection = db.collection("organizacao");
+
+  const resultado = await collection.updateOne(
+    { _id: new ObjectId(orgId) },
+    { $push: { dispositivos: dispositivoId } }  // <-- ADICIONA ao array
+  );
+
+  return resultado;
+}
+
+
+
 export async function modificarCliente(id, cliente) {
     const db = conexao.db("banco");
     const collection = db.collection("clientes");
